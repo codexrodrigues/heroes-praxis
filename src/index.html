@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-br" class="theme-light">
+<!-- Dica: troque para class="theme-dark" para forçar modo escuro -->
+<head>
+    <meta charset="utf-8" />
+    <title>Praxis Heroes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <base href="/" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+    <!-- Material Symbols (Outlined e Filled) -->
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap"
+    />
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+
+    <!-- Fontes recomendadas do tema -->
+    <link
+            rel="preconnect"
+            href="https://fonts.googleapis.com"
+            crossorigin
+    />
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600&display=swap"
+    />
+
+    <!-- Tema principal -->
+
+    <!-- Definição automática de cor do navegador -->
+    <meta name="theme-color" content="#3FBCA5" />
+</head>
+
+<body class="app-bg mat-app-background">
+<app-root></app-root>
+
+<!-- Script opcional: alternância de tema -->
+<script>
+    const toggleTheme = () => {
+        const root = document.documentElement;
+        if (root.classList.contains('theme-dark')) {
+            root.classList.replace('theme-dark', 'theme-light');
+            localStorage.setItem('theme', 'light');
+        } else {
+            root.classList.replace('theme-light', 'theme-dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    };
+
+    // Respeita preferências salvas
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.className = `theme-${saved}`;
+</script>
+</body>
+</html>

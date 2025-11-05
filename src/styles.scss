@@ -1,0 +1,349 @@
+/* ===================================================================
+   styles.scss — Praxis NeoSoft UI polish (v2)
+   - Complementa o theme-neo-soft.v2.scss
+   - Ajustes de layout, tipografia, espaçamentos e estados
+   =================================================================== */
+
+/* 0) Reset e base */
+@use './theme-neo-soft';
+@import "@angular/cdk/overlay-prebuilt.css";
+
+/* O tema principal é carregado via @use './theme-neo-soft' acima */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Poppins', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color: var(--app-text, #2B2A28);
+  background: var(--app-bg, #F4EEE8);
+}
+
+:root { color-scheme: light dark; }
+
+/* 1) App shell */
+.app-shell { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+
+.app-toolbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: #F5F3F1;
+  color: #2B2A28;
+  border-bottom: 1px solid #D8D3CF;
+  display: flex; align-items: center;
+}
+
+.app-content { padding: clamp(12px, 3vw, 24px); min-height: 0; background: var(--app-bg, #F4EEE8); padding-bottom: 60px; }
+
+.app-footer { padding: 8px clamp(12px, 3vw, 24px); border-top: 1px solid #D8D3CF; font-size: 12px; color: color-mix(in oklab, #2B2A28, transparent 35%); background: color-mix(in oklab, #F5F3F1, transparent 20%); }
+
+/* 2) Navegação lateral */
+.app-drawer, .mat-sidenav {
+  background: rgba(47, 43, 42, 0.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #F5F3F1;
+  border-right: 1px solid #2B2726;
+  width: clamp(240px, 22vw, 320px);
+}
+.mat-sidenav.collapsible { transition: width .25s ease; }
+
+.menu-header { padding: 16px; font-weight: 600; letter-spacing: .05em; color: #B0A9A4; }
+.menu-section { margin-top: 8px; }
+.menu-section-header { color: #B0A9A4; font-weight: 600; letter-spacing: .05em; }
+.menu-section-header .mat-icon { color: #B0A9A4; }
+/* Ícones Material Symbols: grade consistente */
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-icons {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  font-size: 20px;           /* mantém linha de base limpa */
+  line-height: 1;            /* remove saltos */
+  vertical-align: middle;    /* alinha com texto */
+}
+.mat-icon { font-size: 20px; line-height: 1; vertical-align: middle; }
+
+/* Item de navegação: baseline perfeita */
+.app-nav-item,
+.menu-item,
+.mat-mdc-list-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;          /* 40–44px */
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #E7DFD8;
+  background: transparent;
+  transition: background .15s ease, color .15s ease, transform .05s ease;
+}
+.mat-mdc-list-item .menu-item { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 10px 12px; border-radius: 10px; width: 100%; }
+
+.menu-item .mat-icon,
+.menu-item .material-symbols-outlined { color: #7A7174; }
+
+.menu-item:hover { background: rgba(63,188,165,.12); color: #fff; }
+
+.menu-item.active {
+  background: var(--app-primary, #3FBCA5);
+  color: #fff;
+}
+.menu-item.active { font-weight: 600; }
+.menu-item.active .mat-icon, .menu-item.active .material-symbols-outlined { color: #fff; }
+/* Active state when routerLinkActive applies to the anchor */
+.app-nav-item.active .menu-item { background: #3FBCA5; color: #fff; font-weight: 600; }
+.app-nav-item.active .menu-item .material-symbols-outlined,
+.app-nav-item.active .menu-item .mat-icon { color: #fff; }
+
+/* 3) Cartões e painéis */
+.surface-card, .mat-mdc-card { background: #F5F3F1; color: #2B2A28; border: 1px solid #E8E2DE; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+/* Toolbar layout/title */
+/* Toolbar title and spacing */
+.app-title { font-family: 'Poppins', 'Inter', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: .2px; line-height: 1.2; display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+.app-subtitle { font-family: 'Inter', 'Poppins', sans-serif; font-size: 14px; font-weight: 400; line-height: 1.4; color: #7A7174; margin: 0; }
+.spacer { flex: 1 1 auto; }
+.app-toolbar .material-symbols-outlined, .app-toolbar .material-icons { color: var(--app-primary, #3FBCA5); }
+
+/* Conteúdo principal com fundo claro (área de conteúdo) */
+.app-bg { background: var(--app-bg, #F4EEE8); }
+
+/* Garante fundo quente também nos containers do Angular Material */
+.mat-app-background,
+.mat-sidenav-content,
+.mat-drawer-content,
+.app-content {
+  background: var(--app-bg, #F4EEE8);
+}
+
+/* 4) Tipografia utilitária */
+.px-section-title { font: 600 18px/1.2 'Poppins', 'Inter', sans-serif; margin: 12px 0 8px; }
+.px-muted { color: var(--app-text-variant, #7A7174); }
+.px-eyebrow { text-transform: uppercase; letter-spacing: .12em; font: 600 11px/1.4 'Inter', sans-serif; color: var(--app-text-variant, #7A7174); }
+
+/* 5) Formularios (MDC) */
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: color-mix(in oklab, var(--app-text-variant, #7A7174), transparent 10%);
+  --mdc-outlined-text-field-input-text-color: var(--app-text, #2B2A28);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-primary, #3FBCA5);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-primary, #3FBCA5);
+}
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing { border-radius: 10px; }
+
+/* 6) Botões (MDC) */
+.mdc-button--raised, .mdc-button--unelevated {
+  --mdc-filled-button-container-color: var(--app-primary, #3FBCA5);
+  --mdc-filled-button-label-text-color: #fff;
+}
+.mdc-button--raised:hover, .mdc-button--unelevated:hover {
+  --mdc-filled-button-container-color: var(--app-primary-hover, #4DC7B0);
+}
+.mdc-button--raised:active, .mdc-button--unelevated:active {
+  --mdc-filled-button-container-color: var(--app-primary-pressed, #2da08d);
+}
+.mdc-button--outlined {
+  --mdc-outlined-button-outline-color: var(--app-primary, #3FBCA5);
+  --mdc-outlined-button-label-text-color: var(--app-primary, #3FBCA5);
+}
+
+/* 7) Focus ring unificado (acessibilidade) */
+:where(button, [role="button"], a, .mat-mdc-button-base, .mat-mdc-form-field, input, select, textarea):focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--app-primary, #3FBCA5), white 20%);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* 8) Tabelas e listas */
+.mat-mdc-table { border-radius: 12px; overflow: hidden; }
+.mat-mdc-header-row { background: color-mix(in oklab, var(--app-surface-high, #F5F3F1), black 2%); }
+.mat-mdc-row:nth-child(even) { background: color-mix(in oklab, var(--app-surface, #EDE6E1), black 1%); }
+
+/* 9) Utilitários de layout */
+.px-container { padding-inline: clamp(16px, 4vw, 32px); }
+.px-grid { display: grid; gap: clamp(12px, 2vw, 20px); }
+.px-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.px-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@container (min-width: 900px) { .px-grid.responsive { grid-template-columns: repeat(12, 1fr); } }
+
+/* 10) Scrollbars (suave e discreto) */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--app-text-variant, #7A7174), transparent 35%) transparent; }
+*::-webkit-scrollbar { height: 10px; width: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--app-text-variant, #7A7174), transparent 35%);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* 11) Modo escuro — ajustes finos (quando não delegados ao theme) */
+.theme-dark .app-footer {
+  color: color-mix(in oklab, var(--app-text, #F5F3F1), transparent 40%);
+  background: color-mix(in oklab, var(--app-surface-high, #332E2D), transparent 20%);
+}
+.theme-dark .menu-item { background: color-mix(in oklab, var(--app-surface, #2B2726), transparent 0%); }
+.theme-dark .menu-item:hover { background: color-mix(in oklab, var(--app-surface, #2B2726), white 2%); }
+
+/* 11b) Modo claro — Sidenav aquecido (NeoSoft) */
+.theme-light {
+  /* Tipografia base do menu (14px, Inter) */
+  .mat-sidenav, .app-drawer { font-family: 'Inter', sans-serif; font-size: 14px; letter-spacing: .02em; }
+  .menu-item, .menu-group { font-weight: 500; }
+  /* Fundo do container da sidenav (quente, sem branco) */
+  .mat-sidenav,
+  .app-drawer {
+    background:
+      linear-gradient(180deg, #F5F3F1 0%, #EDE6E1 60%, #E9E1DB 100%);
+    border-right: 1px solid #E4DCD6;
+    box-shadow: inset -1px 0 0 rgba(0,0,0,0.04);
+    color: #2B2A28;
+  }
+
+  /* Menu principal (cartões arredondados quentes) */
+  .menu-section {
+    background: #F5F3F1;
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    padding: 10px 14px;
+    margin: 0 12px 10px;
+  }
+
+  /* Título do grupo (small caps suave) */
+  .menu-section-header .mat-panel-title,
+  .menu-section-header {
+    padding: 4px 8px 8px;
+    font: 600 11px/1.2 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #8A847F;                     /* on-surface-variant quente */
+  }
+
+  /* Ícones e labels alinhados */
+  .menu-item,
+  .mat-mdc-list-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: transparent;
+    color: #3B3735;
+    transition: background .15s ease, color .15s ease;
+  }
+
+  /* Ícones neutros e alinhados */
+  .menu-item .material-symbols-outlined,
+  .menu-item .mat-icon {
+    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    font-size: 20px; line-height: 1; vertical-align: middle;
+    color: #7A7174;
+  }
+
+  /* Hover: bege levemente mais escuro (sem branco) */
+  .menu-item:hover,
+  .menu-group:hover,
+  .mat-mdc-list-item:hover {
+    background: rgba(63,188,165,.08);
+    color: #2B2A28;
+  }
+
+  /* Ativo: pílula teal com texto branco */
+  .menu-item.active,
+  .mat-mdc-list-item.active,
+  .mdc-list .mdc-list-item--activated {
+    background: #3FBCA5;
+    color: #fff;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    font-weight: 600;
+    transition: all .2s ease;
+  }
+  .menu-item.active .material-symbols-outlined,
+  .menu-item.active .mat-icon { color: #fff; }
+  .app-nav-item.active .menu-item {
+    background: #3FBCA5; color: #fff;
+    border-radius: 999px; padding: 8px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    font-weight: 600; transition: all .2s ease;
+  }
+  .app-nav-item.active .menu-item .material-symbols-outlined,
+  .app-nav-item.active .menu-item .mat-icon { color: #fff; }
+
+  /* Submenus: container com animação e recuo */
+  .submenu {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height .25s ease, opacity .25s ease;
+    padding-left: 32px;
+  }
+  .submenu.open { max-height: 500px; opacity: 1; }
+
+  /* Submenu items */
+  .submenu-item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    margin-top: 4px;
+    border-radius: 10px;
+    color: #3B3735;
+    background: #EDE6E1;
+    border: 1px solid #E4DCD6;
+    transition: background .15s ease, color .15s ease;
+  }
+  .submenu-item:hover { background: rgba(63,188,165,.08); }
+  .submenu-item.active { background: #3FBCA5; color: #fff; font-weight: 600; }
+
+  /* Toolbar combina com os cartões (sem branco chapado) */
+  .app-toolbar {
+    background: #F5F3F1;                /* mesmo tom dos cards do conteúdo */
+    border-bottom: 1px solid #E4DCD6;
+    color: #2B2A28;
+  }
+}
+
+.theme-light .surface-card, .theme-light .mat-mdc-card {
+  background: #F5F3F1;
+  border: 1px solid #E8E2DE;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+/* Rodapé flutuante estilo Grok */
+.app-footer-floating {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--app-text-variant, #7A7174);
+
+  background: color-mix(in oklab, var(--app-surface-high, #F5F3F1), transparent 65%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border-top: 1px solid color-mix(in oklab, var(--app-outline-variant, #D8D3CF), transparent 40%);
+
+  padding: 8px 16px;
+  line-height: 1.4;
+}
+.theme-dark .app-footer-floating {
+  background: rgba(47, 43, 42, 0.8);
+  color: #C0BAB5;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 12) Links coerentes com a paleta */
+a { color: var(--app-primary, #3FBCA5); text-decoration: none; }
+a:hover { text-decoration: underline; }

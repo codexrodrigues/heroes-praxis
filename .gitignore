@@ -1,0 +1,51 @@
+# Based on Angular CLI defaults + workspace specifics
+
+# Builds / outputs
+dist/
+tmp/
+out-tsc/
+.angular/cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Coverage / reports
+coverage/
+
+# IDEs / Editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sass / caches
+.sass-cache/
+
+# Env files (host-specific config)
+.env
+.env.*
+.env.local
+.env.development.local
+.env.production.local
+
+# Archives / temp
+*.tgz
+devserver.pid
+

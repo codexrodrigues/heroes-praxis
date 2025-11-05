@@ -1,0 +1,342 @@
+/* ===================================================================
+   Praxis NeoSoft Theme — v2 (Angular Material 3 / MDC)
+   - Acento primário teal (#3FBCA5)
+   - Paleta quente/terrosa
+   - Suporte a claro/escuro, auto e manual (.theme-light / .theme-dark)
+   - Tokens utilitários para fundo, menus e itens ativos
+   - Focus rings e estados (hover/pressed) consistentes
+   =================================================================== */
+@use '@angular/material' as mat;
+
+// Use built-in M3 palettes for compatibility with Angular Material 20
+$primary-palette: mat.$cyan-palette;
+$tertiary-palette: mat.$violet-palette;
+
+/* ------------------------------------------
+   1) Paletas (Material 3 tone maps)
+   ------------------------------------------ */
+$praxis-primary: (
+        0: #00201a,
+        10: #00382f,
+        20: #005042,
+        30: #006a56,
+        40: #00836a,
+        50: #1c9c7e,
+        60: #3FBCA5, // teal mint (accent)
+        70: #64d0b8,
+        80: #8be3cc,
+        90: #b0f6de,
+        95: #d8fff0,
+        99: #f4fffa,
+        100: #ffffff
+);
+
+$praxis-secondary: (
+        10: #32282b,
+        20: #493f42,
+        30: #61585b,
+        40: #7a7174,
+        50: #948b8e,
+        60: #aea5a8,
+        70: #c9c0c3,
+        80: #e4dbde,
+        90: #f1e8ea,
+        95: #f8f3f4,
+        99: #fffdfd
+);
+
+$praxis-tertiary: (
+        10: #360057,
+        20: #4c1771,
+        30: #62358a,
+        40: #794ea4,
+        50: #9168be,
+        60: #ab82d9, // lilás
+        70: #c4a1ec,
+        80: #dec0ff,
+        90: #f0dcff,
+        95: #f8edff,
+        99: #fefbff
+);
+
+$praxis-neutral: (
+        0:  #1c1a19,
+        10: #302d2b,
+        20: #484442,
+        30: #615c59,
+        40: #7b7572,
+        50: #958f8b,
+        60: #b0a9a4,
+        70: #cbc4be,
+        80: #e7dfd8,
+        90: #f4ede6,
+        95: #f9f5f0,
+        99: #fefbf9
+);
+
+$praxis-neutral-variant: (
+        10: #363433,
+        20: #4d4b49,
+        30: #666360,
+        40: #807c79,
+        50: #9b9692,
+        60: #b6b1ac,
+        70: #d2ccc7,
+        80: #eee8e2,
+        90: #f8f3ee,
+        95: #fdf8f3
+);
+
+// In M3 API, use the tone map palette directly
+$praxis-error: mat.$red-palette;
+
+/* ------------------------------------------
+   2) Tipografia
+   ------------------------------------------ */
+// Use Material default typography for now (define-typography-config not required)
+
+/* ------------------------------------------
+   3) Temas (light / dark)
+   ------------------------------------------ */
+$praxis-light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: $primary-palette,
+    tertiary: $tertiary-palette,
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+$praxis-dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: $primary-palette,
+    tertiary: $tertiary-palette,
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+/* ------------------------------------------
+   4) Aplicação automática e manual
+   - Auto: prefere o claro, mas adapta ao prefers-color-scheme
+   - Manual: .theme-light / .theme-dark (tem prioridade)
+   ------------------------------------------ */
+:root {
+  @include mat.core-theme($praxis-light-theme);
+  @include mat.all-component-themes($praxis-light-theme);
+}
+
+/* Manual override (usa classes no <body> ou <app-root>) */
+.theme-light {
+  @include mat.all-component-themes($praxis-light-theme);
+}
+
+.theme-dark {
+  @include mat.all-component-colors($praxis-dark-theme);
+}
+
+/* Auto (se não houver classe manual) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light):not(.theme-dark) {
+    @include mat.all-component-colors($praxis-dark-theme);
+  }
+}
+
+/* ------------------------------------------
+   5) Tokens utilitários (fundos/menus/itens)
+   - Mapeiam a estética do layout de referência
+   ------------------------------------------ */
+
+/* Fundo base do app (quente / acinzentado) */
+:root {
+  --app-bg: #EDE6E1; /* bege quente (fundo padrão do app) */
+  --app-surface: #EDE6E1;
+  --app-surface-high: #F5F3F1;
+  --app-sidenav: #2F2B2A; /* menu lateral escuro */
+  /* vidro suave para o menu lateral */
+  --app-sidenav-glass: rgba(47, 43, 42, 0.85);
+  --app-outline-variant: #D8D3CF;
+  --app-text: #2B2A28;
+  --app-text-variant: #7A7174;
+  --app-primary: #3FBCA5;
+  --app-primary-hover: #4DC7B0; /* hover de item/menu */
+  --app-primary-pressed: #2da08d;
+  --app-menu-hover: #4DC7B0;
+  /* Gradientes para ações (teal → mint) */
+  --app-primary-gradient: linear-gradient(90deg, #3FBCA5 0%, #8BE3CC 100%);
+  --app-primary-gradient-hover: linear-gradient(90deg, #4DC7B0 0%, #A3EAD7 100%);
+  --app-primary-gradient-pressed: linear-gradient(90deg, #2da08d 0%, #72d4c3 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light):not(.theme-dark) {
+    --app-bg: #1F1C1B;
+    --app-surface: #2B2726;
+    --app-surface-high: #332E2D;
+    --app-outline-variant: #3f3a38;
+    --app-text: #F5F3F1;
+    --app-text-variant: #C0BAB5;
+  }
+}
+
+.theme-dark {
+  --app-bg: #1F1C1B;
+  --app-surface: #2B2726;
+  --app-surface-high: #332E2D;
+  --app-outline-variant: #3f3a38;
+  --app-text: #F5F3F1;
+  --app-text-variant: #C0BAB5;
+}
+
+.theme-light {
+  --app-bg: #F4EEE8; /* fundo da área de conteúdo clara */
+  --app-surface: #EDE6E1;
+  --app-surface-high: #F5F3F1;
+  --app-outline-variant: #D8D3CF;
+  --app-text: #2B2A28;
+  --app-text-variant: #7A7174;
+}
+
+/* Aplicação do fundo principal */
+.app-bg {
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Drawer / Toolbar / Cards */
+.app-drawer, .mat-sidenav {
+  /* usa tom terroso escuro do menu lateral */
+  background: var(--app-sidenav);
+  color: var(--app-text);
+  border-right: 1px solid var(--app-outline-variant);
+}
+
+.app-toolbar, .mat-toolbar {
+  background: var(--app-surface-high);
+  color: var(--app-text);
+  border-bottom: 1px solid var(--app-outline-variant);
+}
+
+.surface-card, .mat-mdc-card {
+  background: var(--app-surface);
+  color: var(--app-text);
+  border: 1px solid color-mix(in oklab, var(--app-outline-variant), transparent 35%);
+  box-shadow: var(--mat-elevation-level1, 0 1px 2px rgba(0,0,0,.08));
+}
+
+/* Itens de menu */
+.app-nav-item, .mat-mdc-list-item {
+  background: color-mix(in oklab, var(--app-surface), black 0%);
+  color: var(--app-text);
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  border-radius: 10px;
+}
+
+.app-nav-item:hover, .mat-mdc-list-item:hover {
+  background: color-mix(in oklab, var(--app-surface), black 3%);
+}
+
+/* Ativo/selecionado */
+.app-nav-item.active,
+.mdc-list .mdc-list-item--activated,
+.mat-mdc-list-item.active {
+  background: var(--app-primary);
+  color: #fff;
+}
+
+.app-nav-item.active .mat-icon,
+.mdc-list .mdc-list-item--activated .mat-icon {
+  color: #fff;
+}
+
+/* Ícones de menu */
+.app-nav-item .mat-icon {
+  color: var(--app-text-variant);
+}
+
+/* ------------------------------------------
+   6) Estados e Acessibilidade
+   ------------------------------------------ */
+/* Botões primários */
+.mdc-button--raised, .mdc-button--unelevated {
+  --mdc-filled-button-container-color: var(--app-primary);
+  --mdc-filled-button-label-text-color: #fff;
+}
+/* Gradiente teal→mint para botões de ação primários */
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-fab.mat-primary,
+.mat-mdc-mini-fab.mat-primary {
+  background: var(--app-primary-gradient) !important;
+  color: #fff !important;
+  border: none;
+}
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-unelevated-button.mat-primary:hover,
+.mat-mdc-fab.mat-primary:hover,
+.mat-mdc-mini-fab.mat-primary:hover {
+  background: var(--app-primary-gradient-hover) !important;
+}
+.mat-mdc-raised-button.mat-primary:active,
+.mat-mdc-unelevated-button.mat-primary:active,
+.mat-mdc-fab.mat-primary:active,
+.mat-mdc-mini-fab.mat-primary:active {
+  background: var(--app-primary-gradient-pressed) !important;
+}
+
+/* Botão outlined */
+.mdc-button--outlined {
+  --mdc-outlined-button-outline-color: var(--app-primary);
+  --mdc-outlined-button-label-text-color: var(--app-primary);
+}
+.mdc-button--outlined:hover {
+  --mdc-outlined-button-outline-color: var(--app-primary-hover);
+  --mdc-outlined-button-label-text-color: var(--app-primary-hover);
+}
+
+/* Focus ring unificado (acessibilidade) */
+:where(button, [role="button"], a, .mat-mdc-button-base, .mat-mdc-form-field, input, select, textarea):focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--app-primary), white 20%);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Campos de formulário */
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: color-mix(in oklab, var(--app-text-variant), transparent 10%);
+  --mdc-outlined-text-field-input-text-color: var(--app-text);
+  --mdc-outlined-text-field-hover-outline-color: var(--app-primary);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-primary);
+}
+
+/* Chips / Badges com acento */
+.mat-mdc-chip.mat-primary {
+  --mdc-chip-label-text-color: #fff;
+  --mdc-chip-elevated-container-color: var(--app-primary);
+}
+
+/* ------------------------------------------
+   7) Utilitários de layout e tipografia
+   ------------------------------------------ */
+.px-container {
+  padding-inline: clamp(16px, 4vw, 32px);
+}
+.px-section-title {
+  font-weight: 600;
+  letter-spacing: .2px;
+  margin: 12px 0 8px;
+}
+.px-muted {
+  color: var(--app-text-variant);
+}
+
+/* ------------------------------------------
+   8) Example host scoping (opcional)
+   ------------------------------------------ */
+/*
+:host-context(.theme-dark) .surface-card { ... }
+*/
