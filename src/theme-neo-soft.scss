@@ -165,11 +165,16 @@ $praxis-dark-theme: mat.define-theme((
   --md-sys-color-on-surface: #2B2A28;
   --md-sys-color-surface-container: #EDE6E1;
   --md-sys-color-surface-container-low: #F4EEE8;
+  --md-sys-color-surface-container-highest: #F5F3F1; /* necessário para componentes que usam 'highest' (ex.: tabela) */
   --md-sys-color-surface-container-high: #E0F5EE; /* usado p/ submenus */
   --md-sys-color-outline: #D8D3CF;
   --md-sys-color-outline-variant: #E4DCD6;
   --md-sys-color-inverse-surface: #2F2B2A;
   --md-sys-color-inverse-on-surface: #F5F3F1;
+
+  /* Bridge para variáveis do Material (usadas por componentes que leem --mat-sys-*) */
+  --mat-sys-surface-container: #EDE6E1;
+  --mat-sys-on-surface: #2B2A28;
 
   /* M3 state layers */
   --md-sys-state-hover-opacity: 8%;
@@ -207,13 +212,18 @@ $praxis-dark-theme: mat.define-theme((
     --md-sys-color-on-surface: #F5F3F1;
     --md-sys-color-surface-container: #332E2D;
     --md-sys-color-surface-container-low: #1F1C1B;
+    --md-sys-color-surface-container-highest: #2F2B2A;
     --md-sys-color-surface-container-high: #2F2B2A;
     --md-sys-color-outline: #3f3a38;
     --md-sys-color-outline-variant: #504B49;
     --md-sys-color-inverse-surface: #F5F3F1;
     --md-sys-color-inverse-on-surface: #2B2A28;
 
-    --app-bg: #1F1C1B;
+    /* Bridge (auto dark) */
+    --mat-sys-surface-container: #332E2D;
+    --mat-sys-on-surface: #F5F3F1;
+
+    --app-bg: #3C3837;
     --app-surface: #2B2726;
     --app-surface-high: #332E2D;
     --app-outline-variant: #3f3a38;
@@ -233,13 +243,18 @@ $praxis-dark-theme: mat.define-theme((
   --md-sys-color-on-surface: #F5F3F1;
   --md-sys-color-surface-container: #332E2D;
   --md-sys-color-surface-container-low: #1F1C1B;
+  --md-sys-color-surface-container-highest: #2F2B2A;
   --md-sys-color-surface-container-high: #2F2B2A;
   --md-sys-color-outline: #3f3a38;
   --md-sys-color-outline-variant: #504B49;
   --md-sys-color-inverse-surface: #F5F3F1;
   --md-sys-color-inverse-on-surface: #2B2A28;
 
-  --app-bg: #1F1C1B;
+  /* Bridge (dark) */
+  --mat-sys-surface-container: #332E2D;
+  --mat-sys-on-surface: #F5F3F1;
+
+  --app-bg: #3C3837;
   --app-surface: #2B2726;
   --app-surface-high: #332E2D;
   --app-outline-variant: #3f3a38;
@@ -299,35 +314,30 @@ $praxis-dark-theme: mat.define-theme((
   box-shadow: var(--mat-elevation-level1, 0 1px 2px rgba(0,0,0,.08));
 }
 
-/* Itens de menu */
-.app-nav-item, .mat-mdc-list-item {
+/* List items (genéricos; não o Sidebar) */
+.mat-mdc-list-item {
   background: color-mix(in oklab, var(--app-surface), black 0%);
   color: var(--app-text);
   transition: background .15s ease, color .15s ease, box-shadow .15s ease;
   border-radius: 10px;
 }
 
-.app-nav-item:hover, .mat-mdc-list-item:hover {
+.mat-mdc-list-item:hover {
   background: color-mix(in oklab, var(--app-surface), black 3%);
 }
 
 /* Ativo/selecionado */
-.app-nav-item.active,
 .mdc-list .mdc-list-item--activated,
 .mat-mdc-list-item.active {
   background: var(--app-primary);
   color: #fff;
 }
 
-.app-nav-item.active .mat-icon,
 .mdc-list .mdc-list-item--activated .mat-icon {
   color: #fff;
 }
 
-/* Ícones de menu */
-.app-nav-item .mat-icon {
-  color: var(--app-text-variant);
-}
+/* Removido: estilos de ícones do antigo menu (.app-nav-item) */
 
 /* ------------------------------------------
    6) Estados e Acessibilidade
@@ -370,7 +380,7 @@ $praxis-dark-theme: mat.define-theme((
 }
 
 /* Focus ring unificado (acessibilidade) */
-:where(button, [role="button"], a, .mat-mdc-button-base, .mat-mdc-form-field, input, select, textarea):focus-visible {
+:where(button, [role="button"], a, .mat-mdc-button-base, input, select, textarea):focus-visible {
   outline: 3px solid color-mix(in oklab, var(--app-primary), white 20%);
   outline-offset: 2px;
   border-radius: 8px;

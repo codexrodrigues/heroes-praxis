@@ -5,11 +5,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthService } from './core/auth/auth.service';
 import { map } from 'rxjs/operators';
 import { SidebarComponent, SidebarGroup } from './sidebar.component';
+import { SettingsPanelService } from '@praxisui/settings-panel';
+import { HostGlobalConfigEditorComponent } from './settings/host-global-config-editor.component';
 
 type MenuItem = {
     label: string;
@@ -23,7 +26,7 @@ type MenuItem = {
     standalone: true,
     imports: [
         RouterOutlet, RouterLink,
-        MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule, MatExpansionModule, SidebarComponent,
+        MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule, MatTooltipModule, MatExpansionModule, SidebarComponent,
     ],
     template: `
   <mat-sidenav-container class="app-shell app-bg" autosize>
@@ -45,6 +48,20 @@ type MenuItem = {
           <span class="env-pill" title="Ambiente/Tenant">{{ tenantLabel() }}</span>
         }
         <span class="spacer"></span>
+        <!-- Links rápidos para os repositórios (app e API) -->
+        <a mat-icon-button matTooltip="Código (Heroes App)" aria-label="Abrir GitHub do App"
+           href="https://github.com/codexrodrigues/heroes-praxis" target="_blank" rel="noopener noreferrer">
+          <span class="material-symbols-outlined">code</span>
+        </a>
+        <a mat-icon-button matTooltip="Código (Praxis API)" aria-label="Abrir GitHub da API"
+           href="https://github.com/codexrodrigues/praxis-api-quickstart" target="_blank" rel="noopener noreferrer">
+          <span class="material-symbols-outlined">dns</span>
+        </a>
+        <!-- Acesso rápido às Configurações Globais do Praxis -->
+        <button mat-icon-button matTooltip="Configurações do Praxis" aria-label="Abrir Configurações do Praxis"
+                (click)="openPraxisSettings()">
+          <span class="material-symbols-outlined">tune</span>
+        </button>
         <button mat-icon-button (click)="toggleTheme()" aria-label="Alternar tema claro/escuro">
           <span class="material-symbols-outlined">{{ themeIcon() }}</span>
         </button>
@@ -89,33 +106,19 @@ export class AppComponent {
     protected theme = signal<'light' | 'dark'>('light');
     protected tenantLabel = signal<string | null>(null);
     protected themeIcon = computed(() => this.theme() === 'dark' ? 'light_mode' : 'dark_mode');
+    // Menu em itens de primeiro nível com ícones (Material Symbols), sem "Gerenciar"
     protected readonly menu = signal<SidebarGroup[]>([
-        {
-            label: 'Funcionários', icon: 'people', children: [
-                { label: 'Listar/Visualizar Funcionários', path: '/funcionarios' },
-                { label: 'Criar Novo Funcionário', path: '/funcionarios/new' },
-                { label: 'Histórico de Mudanças', path: '/funcionarios/history' },
-            ]
-        },
-        { label: 'Cargos e Departamentos', icon: 'account_tree', children: [
-                { label: 'Gerenciar Cargos', path: '/cargos' },
-                { label: 'Gerenciar Departamentos', path: '/departamentos' },
-            ]},
-        { label: 'Endereços e Dependentes', icon: 'home', children: [
-                { label: 'Gerenciar Endereços', path: '/enderecos' },
-                { label: 'Gerenciar Dependentes', path: '/dependentes' },
-            ]},
-        { label: 'Folhas de Pagamento', icon: 'request_quote', children: [
-                { label: 'Listar Folhas', path: '/folhas-pagamento' },
-                { label: 'Gerar Nova Folha', path: '/folhas-pagamento/new' },
-            ]},
-        { label: 'Férias e Afastamentos', icon: 'beach_access', children: [
-                { label: 'Solicitar Férias', path: '/ferias-afastamentos/new' },
-                { label: 'Registrar Afastamentos', path: '/ferias-afastamentos' },
-            ]},
-        { label: 'Compliance', icon: 'gavel', children: [
-                { label: 'Incidentes & Acordos', path: '/compliance' },
-            ]},
+        { label: 'Heróis', icon: 'groups', path: '/funcionarios' },
+        { label: 'Novo Herói', icon: 'person_add', path: '/funcionarios/new' },
+        { label: 'Cargos', icon: 'work', path: '/cargos' },
+        { label: 'Departamentos', icon: 'apartment', path: '/departamentos' },
+        { label: 'Endereços', icon: 'place', path: '/enderecos' },
+        { label: 'Dependentes', icon: 'family_restroom', path: '/dependentes' },
+        { label: 'Folhas de Pagamento', icon: 'request_quote', path: '/folhas-pagamento' },
+        { label: 'Férias e Afastamentos', icon: 'beach_access', path: '/ferias-afastamentos' },
+        // Extensões futuras (se necessário):
+        // { label: 'Incidentes', icon: 'report', path: '/incidentes' },
+        // { label: 'Acordos', icon: 'gavel', path: '/acordos-regulatorios' },
     ]);
 
     private breakpointObserver = inject(BreakpointObserver);
@@ -184,5 +187,16 @@ export class AppComponent {
 
     logout() {
         this.auth.logout();
+    }
+
+    // --- Praxis Global Settings ---
+    private _settingsSvc = inject(SettingsPanelService);
+    openPraxisSettings() {
+        this._settingsSvc.open({
+            id: 'praxis-global-settings',
+            title: 'Configurações do Praxis',
+            titleIcon: 'tune',
+            content: { component: HostGlobalConfigEditorComponent },
+        });
     }
 }

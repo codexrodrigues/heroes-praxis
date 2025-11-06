@@ -13,19 +13,19 @@
   - actions: define os fluxos create/view/edit; aqui abrimos em modal com o mesmo formId
   - defaults.modal: preferências de UX (ex.: lembrar tamanho/estado da janela)
 -->
-<praxis-crud
-  [metadata]="{
-    component: 'praxis-crud',
-    resource: { path: '/human-resources/funcionarios', idField: 'id' },
+  <praxis-crud
+    [metadata]="{
+      component: 'praxis-crud',
+      resource: { path: '/human-resources/funcionarios', idField: 'id' },
     table: {
       toolbar: { visible: true, position: 'top' },
       behavior: { filtering: { advancedFilters: { enabled: true } } }
     },
-    actions: [
-      { action: 'create', label: 'Novo', openMode: 'route', route: '/funcionarios/new' },
-      { action: 'view', openMode: 'modal', formId: 'funcionarios-form' },
-      { action: 'edit', openMode: 'route', route: '/funcionarios/:id', params: [{ from: 'id', to: 'routeParam', name: 'id' }] }
-    ],
-    defaults: { modal: { rememberLastState: true } }
-  }"
-></praxis-crud>
+      actions: [
+        { action: 'create', label: 'Novo', openMode: 'route', route: '/funcionarios/new' },
+        { action: 'view', openMode: 'modal', formId: 'funcionarios-form' },
+        { action: 'edit', openMode: 'route', route: '/funcionarios/:id', params: [{ from: 'id', to: 'routeParam', name: 'id' }] }
+      ],
+      defaults: { modal: { rememberLastState: true } }
+    }"
+  ></praxis-crud>

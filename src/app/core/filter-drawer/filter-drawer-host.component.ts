@@ -1,6 +1,7 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PraxisFilterForm } from '@praxisui/dynamic-form';
@@ -8,7 +9,7 @@ import { PraxisFilterForm } from '@praxisui/dynamic-form';
 @Component({
   selector: 'app-filter-drawer-host',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, PraxisFilterForm],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatProgressBarModule, PraxisFilterForm],
   template: `
     <div class="drawer-header">
       <h3 class="title">{{ data.title || 'Filtro Avançado' }}</h3>
@@ -16,7 +17,8 @@ import { PraxisFilterForm } from '@praxisui/dynamic-form';
       <button mat-icon-button (click)="close()" aria-label="Fechar filtro"><mat-icon>close</mat-icon></button>
     </div>
     <div class="drawer-content">
-      <praxis-filter-form
+      <mat-progress-bar *ngIf="!data?.config" mode="indeterminate"></mat-progress-bar>
+      <praxis-filter-form *ngIf="data?.config"
         [formId]="data.formId"
         [resourcePath]="data.resourcePath"
         [config]="data.config"
@@ -24,6 +26,7 @@ import { PraxisFilterForm } from '@praxisui/dynamic-form';
         (valueChange)="onValue($event)"
         (validityChange)="onValidity($event)"
       ></praxis-filter-form>
+      <p *ngIf="!data?.config" class="loading-hint">Carregando schema do filtro…</p>
     </div>
     <div class="drawer-actions">
       <button mat-stroked-button (click)="close()">Cancelar</button>

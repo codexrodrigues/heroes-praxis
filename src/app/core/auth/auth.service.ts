@@ -11,8 +11,14 @@ export class AuthService {
   readonly loggedIn = computed(() => this._loggedIn());
 
   constructor(private http: HttpClient, private router: Router) {
-    // Optional session check (no redirect; login is optional for public endpoints)
-    this.refreshSession();
+    // Optional session check (no redirect; login é opcional para endpoints públicos)
+    // Evita travar a inicialização em ambientes sem backend (WSL/sem proxy) — só ativa se o host optar.
+    try {
+      const auto = localStorage.getItem('pax.auth.auto');
+      if (auto === 'true') {
+        queueMicrotask(() => this.refreshSession());
+      }
+    } catch {}
   }
 
   login(payload: LoginRequest) {
@@ -34,5 +40,13 @@ export class AuthService {
       next: (res) => { this._loggedIn.set(res.status === 204 || res.status === 200); this.sessionChecked.set(true); },
       error: () => { this._loggedIn.set(false); this.sessionChecked.set(true); },
     });
+  }
+
+  /**
+   * Habilita/desabilita o ping de sessão automático no bootstrap do app.
+   * Útil em dev quando o backend pode não estar disponível.
+   */
+  setAutoSessionCheck(enabled: boolean): void {
+    try { localStorage.setItem('pax.auth.auto', String(enabled)); } catch {}
   }
 }

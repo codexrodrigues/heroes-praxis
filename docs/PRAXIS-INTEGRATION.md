@@ -81,6 +81,10 @@ Página de formulário (rota): `src/app/features/human-resources/funcionarios/fu
   }
   ```
 
+- Observação (carregamento assíncrono do schema):
+  - O schema do filtro é carregado de forma assíncrona; garanta que o host do drawer só renderize `<praxis-filter-form>` quando `data.config` existir (ex.: `*ngIf="data?.config"`) e exiba um `mat-progress-bar` enquanto carrega. Isso evita erros quando o back‑end está lento/indisponível.
+  - Exemplo em `filter-drawer-host.component.ts` já inclui esse guard.
+
 ## 5) Ajustes visuais no host (opcional)
 
 - Centralização dos botões icônicos no header do modal do CRUD: `src/styles.scss`
@@ -101,3 +105,22 @@ Página de formulário (rota): `src/app/features/human-resources/funcionarios/fu
 - API em 500 (schemas/filter): verifique DB/seed e envs.
 - Verifique o alvo do proxy (`[proxy] target=...`) ao iniciar `ng serve`.
 - Testes: `http://localhost:4200/api/actuator/health` e `http://localhost:4200/schemas/filtered?...`.
+- Coluna de ações no CRUD: agora é gerada automaticamente com base nas ações declaradas (`view`/`edit`) no metadata do `<praxis-crud>`. Defina manualmente `table.actions.row` apenas se quiser personalizar/ocultar.
+
+## 7) Configurações Globais do Praxis
+
+- Acesso pela UI:
+  - Ícone de engrenagem/ajustes na toolbar do app (tooltip "Configurações do Praxis").
+  - Opcionalmente via rota `/#/settings/praxis` (abre o mesmo painel).
+
+- O que afeta (escopo atual do editor do Heroes):
+  - Tabela: tamanho de página padrão e densidade; modo padrão do Filtro Avançado (drawer/modal/overlay).
+  - CRUD: modo de abertura padrão global e por ação (create/view/edit); rotas e formId opcionais por ação; preferências do modal (rememberLastState).
+
+- Persistência e aplicação:
+  - O painel do Heroes salva/aplica via `GlobalConfigAdminService` (merge em `GlobalConfigService`) e persiste no `CONFIG_STORAGE` por tenant.
+  - O seed inicial permanece definido em `src/main.ts` com `provideGlobalConfigSeed(...)` e é sobreposto pelos ajustes locais.
+
+- Como resetar para os defaults:
+  - No painel, use o botão "Redefinir" para voltar ao estado inicial do painel e depois "Aplicar"/"Salvar".
+  - Para limpar manualmente: apague as chaves do storage do Praxis no navegador (localStorage) referentes ao tenant atual.

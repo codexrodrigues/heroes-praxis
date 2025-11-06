@@ -47,21 +47,18 @@ html, body {
 
 .app-footer { padding: 8px clamp(12px, 3vw, 24px); border-top: 1px solid #D8D3CF; font-size: 12px; color: color-mix(in oklab, #2B2A28, transparent 35%); background: color-mix(in oklab, #F5F3F1, transparent 20%); }
 
-/* 2) Navegação lateral */
-.app-drawer, .mat-sidenav {
-  background: var(--md-sys-color-inverse-surface, rgba(47, 43, 42, 0.88));
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: var(--md-sys-color-inverse-on-surface, #F5F3F1);
-  border-right: 1px solid var(--md-sys-color-outline, #2B2726);
-  width: clamp(240px, 22vw, 320px);
+/* 2) Sidenav container (mínimo global)
+   Observação: todo o estilo de menu (itens, submenus, estados)
+   foi movido para o componente Sidebar. Aqui mantemos apenas
+   regras neutras do container do MatSidenav. */
+.app-drawer .mat-drawer-inner-container,
+.mat-sidenav .mat-drawer-inner-container {
+  overflow: hidden;              /* rolagem fica dentro do menu */
+  display: flex;
+  flex-direction: column;
 }
-.mat-sidenav.collapsible { transition: width .25s ease; }
+.mat-sidenav.collapsible { transition: width .15s ease; }
 
-.menu-header { padding: 16px; font-weight: 600; letter-spacing: .05em; color: #B0A9A4; }
-.menu-section { margin-top: 8px; }
-.menu-section-header { color: #B0A9A4; font-weight: 600; letter-spacing: .05em; }
-.menu-section-header .mat-icon { color: #B0A9A4; }
 /* Ícones Material Symbols: grade consistente */
 .material-symbols-outlined,
 .material-symbols-rounded,
@@ -73,37 +70,7 @@ html, body {
 }
 .mat-icon { font-size: 22px; line-height: 1; vertical-align: middle; }
 
-/* Item de navegação: baseline perfeita */
-.app-nav-item,
-.menu-item,
-.mat-mdc-list-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 40px;          /* 40–44px */
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: #E7DFD8;
-  background: transparent;
-  transition: background .15s ease, color .15s ease, transform .05s ease;
-}
-.mat-mdc-list-item .menu-item { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 10px 12px; border-radius: 10px; width: 100%; }
-
-.menu-item .mat-icon,
-.menu-item .material-symbols-outlined { color: var(--md-sys-color-outline, #7A7174); }
-
-.menu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%); color: var(--md-sys-color-on-surface, #2B2A28); }
-
-.menu-item.active {
-  background: var(--md-sys-color-primary, #3FBCA5);
-  color: var(--md-sys-color-on-primary, #fff);
-}
-.menu-item.active { font-weight: 600; }
-.menu-item.active .mat-icon, .menu-item.active .material-symbols-outlined { color: #fff; }
-/* Active state when routerLinkActive applies to the anchor */
-.app-nav-item.active .menu-item { background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff); font-weight: 600; }
-.app-nav-item.active .menu-item .material-symbols-outlined,
-.app-nav-item.active .menu-item .mat-icon { color: #fff; }
+/* Item de navegação: estilos do menu foram movidos para o SidebarComponent */
 
 /* 3) Cartões e painéis */
 .surface-card, .mat-mdc-card { background: #F5F3F1; color: #2B2A28; border: 1px solid #E8E2DE; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
@@ -140,7 +107,9 @@ html, body {
 }
 .mat-mdc-form-field .mdc-notched-outline__leading,
 .mat-mdc-form-field .mdc-notched-outline__notch,
-.mat-mdc-form-field .mdc-notched-outline__trailing { border-radius: 10px; }
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-radius: 0; /* segments remain square; container provides rounding */
+}
 
 /* 6) Botões (MDC) */
 .mdc-button--raised, .mdc-button--unelevated {
@@ -159,7 +128,7 @@ html, body {
 }
 
 /* 7) Focus ring unificado (acessibilidade) */
-:where(button, [role="button"], a, .mat-mdc-button-base, .mat-mdc-form-field, input, select, textarea):focus-visible {
+:where(button, [role="button"], a, .mat-mdc-button-base, input, select, textarea):focus-visible {
   outline: 3px solid color-mix(in oklab, var(--app-primary, #3FBCA5), white 20%);
   outline-offset: 2px;
   border-radius: 8px;
@@ -199,6 +168,19 @@ html, body {
 .mat-mdc-table { border-radius: 12px; overflow: hidden; }
 .mat-mdc-header-row { background: color-mix(in oklab, var(--app-surface-high, #F5F3F1), black 2%); }
 .mat-mdc-row:nth-child(even) { background: color-mix(in oklab, var(--app-surface, #EDE6E1), black 1%); }
+/* Hover perceptível tanto em linhas claras quanto escuras (zebra) */
+praxis-table .mat-mdc-row:hover {
+  background: color-mix(in oklab, var(--app-surface-high, #F5F3F1), black 6%) !important;
+}
+.theme-dark praxis-table .mat-mdc-row:hover {
+  background: color-mix(in oklab, var(--app-surface, #2B2726), white 8%) !important;
+}
+
+/* Respiro entre ícone e texto em botões (sem afetar botões apenas com ícone) */
+.mat-mdc-button-base .mat-icon:not(:only-child),
+.mat-mdc-button-base .material-symbols-outlined:not(:only-child) {
+  margin-right: 6px;
+}
 
 /* 9) Utilitários de layout */
 .px-container { padding-inline: clamp(16px, 4vw, 32px); }
@@ -223,141 +205,9 @@ html, body {
   color: color-mix(in oklab, var(--app-text, #F5F3F1), transparent 40%);
   background: color-mix(in oklab, var(--app-surface-high, #332E2D), transparent 20%);
 }
-.theme-dark .menu-item { background: color-mix(in oklab, var(--md-sys-color-surface, #2B2726), transparent 0%); }
-.theme-dark .menu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #F5F3F1), transparent 92%); }
+/* Estilos de .menu-item (escuro) movidos para o SidebarComponent */
 
-/* 11b) Modo claro — Sidenav aquecido (NeoSoft) */
-.theme-light {
-  /* Tipografia base do menu (14px, Inter) */
-  .mat-sidenav, .app-drawer { font-family: 'Inter', sans-serif; font-size: 14px; letter-spacing: .02em; }
-  .menu-item, .menu-group { font-weight: 500; }
-  /* Fundo do container da sidenav (quente, sem branco) */
-  .mat-sidenav,
-  .app-drawer {
-    background:
-      linear-gradient(180deg, var(--md-sys-color-surface, #F5F3F1) 0%, var(--md-sys-color-surface-container, #EDE6E1) 60%, color-mix(in oklab, var(--md-sys-color-surface-container, #EDE6E1), black 2%) 100%);
-    border-right: 1px solid var(--md-sys-color-outline-variant, #E4DCD6);
-    box-shadow: inset -1px 0 0 rgba(0,0,0,0.04);
-    color: var(--md-sys-color-on-surface, #2B2A28);
-  }
-
-  /* Menu principal (cartões arredondados quentes) */
-  .menu-section {
-    background: #F5F3F1;
-    border-radius: 18px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.05);
-    padding: 10px 14px;
-    margin: 0 12px 10px;
-  }
-
-  /* Título do grupo (small caps suave) */
-  .menu-section-header .mat-panel-title,
-  .menu-section-header {
-    padding: 4px 8px 8px;
-    font: 600 11px/1.2 'Inter', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: #8A847F;                     /* on-surface-variant quente */
-  }
-
-  /* Ícones e labels alinhados */
-  .menu-item,
-  .mat-mdc-list-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 40px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: transparent;
-    color: #3B3735;
-    transition: background .15s ease, color .15s ease;
-  }
-
-  /* Ícones neutros e alinhados */
-  .menu-item .material-symbols-outlined,
-  .menu-item .mat-icon {
-    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-    font-size: 20px; line-height: 1; vertical-align: middle;
-    color: var(--md-sys-color-outline, #7A7174);
-  }
-
-  /* Hover: bege levemente mais escuro (sem branco) */
-  .menu-item:hover:not(.active),
-  .menu-group:hover,
-  .mat-mdc-list-item:hover:not(.active) {
-    background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%);
-    color: var(--md-sys-color-on-surface, #2B2A28);
-  }
-
-  /* Ativo: pílula teal com texto branco */
-  .menu-item.active,
-  .mat-mdc-list-item.active,
-  .mdc-list .mdc-list-item--activated {
-    background: var(--md-sys-color-primary, #3FBCA5);
-    color: var(--md-sys-color-on-primary, #fff);
-    border-radius: 999px;
-    padding: 8px 16px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    font-weight: 600;
-    transition: all .2s ease;
-  }
-  .menu-item.active .material-symbols-outlined,
-  .menu-item.active .mat-icon { color: var(--md-sys-color-on-primary, #fff); }
-  .app-nav-item.active .menu-item {
-    background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff);
-    border-radius: 999px; padding: 8px 16px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    font-weight: 600; transition: all .2s ease;
-  }
-  .app-nav-item.active .menu-item .material-symbols-outlined,
-  .app-nav-item.active .menu-item .mat-icon { color: var(--md-sys-color-on-primary, #fff); }
-
-  /* Collapsed sidebar: neutralize pill style for active items */
-  .app-sidenav.collapsed .menu .menu-item.active {
-    background: transparent;
-    color: var(--md-sys-color-on-surface, #3B3735);
-    border-radius: 12px;
-    padding: 0;
-    box-shadow: none;
-  }
-  .app-sidenav.collapsed .menu .menu-item.active .material-symbols-outlined,
-  .app-sidenav.collapsed .menu .menu-item.active .mat-icon { color: var(--md-sys-color-on-surface, #3B3735); }
-
-  /* Submenus: container com animação e recuo */
-  .submenu {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    max-height: 0;
-    opacity: 0;
-    transition: max-height .25s ease, opacity .25s ease;
-    padding-left: 24px;
-  }
-  .submenu.open { max-height: 500px; opacity: 1; }
-
-  /* Submenu items */
-  .submenu-item {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 12px;
-    margin-top: 4px;
-    border-radius: 10px;
-    color: var(--md-sys-color-on-surface, #3B3735);
-    background: var(--md-sys-color-surface-container, #EDE6E1);
-    border: 1px solid var(--md-sys-color-outline-variant, #E4DCD6);
-    transition: background .15s ease, color .15s ease;
-    font-size: 13px;
-  }
-  .submenu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%); }
-  .submenu-item.active { background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff); font-weight: 600; }
-
-  /* Toolbar combina com os cartões (sem branco chapado) */
-  .app-toolbar {
-    background: #F5F3F1;                /* mesmo tom dos cards do conteúdo */
-    border-bottom: 1px solid #E4DCD6;
-    color: #2B2A28;
-  }
-}
+/* 11b) Estilos de menu no modo claro foram movidos para o SidebarComponent */
 
 .theme-light .surface-card, .theme-light .mat-mdc-card {
   background: #F5F3F1;
@@ -418,3 +268,18 @@ a:hover { text-decoration: underline; }
 .typ-body-large     { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; letter-spacing: 0.5px; }
 .typ-body-medium    { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 14px; line-height: 20px; letter-spacing: 0.25px; }
 .typ-body-small     { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 12px; line-height: 16px; letter-spacing: 0.4px; }
+
+/* 14) Tabela (PraxisTable) — ajuste fino do header para o tema Heroes
+   Aplica um leve contraste no cabeçalho e coerência de bordas. */
+praxis-table {
+  /* claro */
+  --p-table-header-bg: color-mix(in oklab, var(--app-surface-high, #F5F3F1), black 4%);
+  --p-table-header-fg: var(--app-text, #2B2A28);
+  --p-table-border-color: color-mix(in oklab, var(--app-outline-variant, #D8D3CF), black 6%);
+}
+.theme-dark praxis-table {
+  /* escuro */
+  --p-table-header-bg: color-mix(in oklab, var(--app-surface, #2B2726), white 6%);
+  --p-table-header-fg: var(--app-text, #F5F3F1);
+  --p-table-border-color: color-mix(in oklab, var(--app-outline-variant, #3f3a38), white 8%);
+}
