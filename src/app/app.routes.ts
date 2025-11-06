@@ -4,6 +4,8 @@ export const APP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'funcionarios' },
   { path: 'login', loadComponent: () => import('./features/auth/login.component').then(m => m.LoginComponent) },
   { path: 'funcionarios', loadComponent: () => import('./features/human-resources/funcionarios/funcionarios').then(m => m.Funcionarios) },
+  { path: 'funcionarios/new', loadComponent: () => import('./features/human-resources/funcionarios/funcionario-form.page').then(m => m.FuncionarioFormPage) },
+  { path: 'funcionarios/:id', loadComponent: () => import('./features/human-resources/funcionarios/funcionario-form.page').then(m => m.FuncionarioFormPage) },
   { path: 'cargos', loadComponent: () => import('./features/human-resources/cargos/cargos').then(m => m.Cargos) },
   { path: 'departamentos', loadComponent: () => import('./features/human-resources/departamentos/departamentos').then(m => m.Departamentos) },
   { path: 'enderecos', loadComponent: () => import('./features/human-resources/enderecos/enderecos').then(m => m.Enderecos) },

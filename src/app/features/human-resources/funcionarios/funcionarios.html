@@ -1,8 +1,31 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Heróis & Recrutas</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Gerencie o cadastro de heróis, recrutas e até mesmo os estagiários que só aparecem para o café.</p>
-  </mat-card-content>
-</mat-card>
+<app-route-intro-card
+  title="Funcionários"
+  icon="groups"
+  [description]="'Cadastre heróis, recrutas e, claro, os estagiários — os verdadeiros guardiões da máquina de café.'"
+  [subDescription]="'Dica tática: clique em “Novo” para recrutar mais um salvador do mundo.'"
+></app-route-intro-card>
+
+<!--
+  CRUD dinâmico orientado por metadados
+  - component: identifica o host responsável (praxis-crud)
+  - resource.path: rota do recurso na API (sem /api)
+  - table.toolbar.visible: exibe a barra de ferramentas; com `actions`, a lib injeta o botão "Novo"
+  - actions: define os fluxos create/view/edit; aqui abrimos em modal com o mesmo formId
+  - defaults.modal: preferências de UX (ex.: lembrar tamanho/estado da janela)
+-->
+<praxis-crud
+  [metadata]="{
+    component: 'praxis-crud',
+    resource: { path: '/human-resources/funcionarios', idField: 'id' },
+    table: {
+      toolbar: { visible: true, position: 'top' },
+      behavior: { filtering: { advancedFilters: { enabled: true } } }
+    },
+    actions: [
+      { action: 'create', label: 'Novo', openMode: 'route', route: '/funcionarios/new' },
+      { action: 'view', openMode: 'modal', formId: 'funcionarios-form' },
+      { action: 'edit', openMode: 'route', route: '/funcionarios/:id', params: [{ from: 'id', to: 'routeParam', name: 'id' }] }
+    ],
+    defaults: { modal: { rememberLastState: true } }
+  }"
+></praxis-crud>

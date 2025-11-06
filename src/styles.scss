@@ -35,17 +35,25 @@ html, body {
   display: flex; align-items: center;
 }
 
-.app-content { padding: clamp(12px, 3vw, 24px); min-height: 0; background: var(--app-bg, #F4EEE8); padding-bottom: 60px; }
+.app-content {
+  padding: clamp(12px, 3vw, 24px);
+  min-height: 0;
+  background: var(--app-bg, #F4EEE8);
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+}
+.app-content > * { flex: 1 1 auto; min-height: 0; }
 
 .app-footer { padding: 8px clamp(12px, 3vw, 24px); border-top: 1px solid #D8D3CF; font-size: 12px; color: color-mix(in oklab, #2B2A28, transparent 35%); background: color-mix(in oklab, #F5F3F1, transparent 20%); }
 
 /* 2) Navegação lateral */
 .app-drawer, .mat-sidenav {
-  background: rgba(47, 43, 42, 0.88);
+  background: var(--md-sys-color-inverse-surface, rgba(47, 43, 42, 0.88));
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  color: #F5F3F1;
-  border-right: 1px solid #2B2726;
+  color: var(--md-sys-color-inverse-on-surface, #F5F3F1);
+  border-right: 1px solid var(--md-sys-color-outline, #2B2726);
   width: clamp(240px, 22vw, 320px);
 }
 .mat-sidenav.collapsible { transition: width .25s ease; }
@@ -59,11 +67,11 @@ html, body {
 .material-symbols-rounded,
 .material-icons {
   font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-  font-size: 20px;           /* mantém linha de base limpa */
+  font-size: 22px;           /* grade consistente */
   line-height: 1;            /* remove saltos */
   vertical-align: middle;    /* alinha com texto */
 }
-.mat-icon { font-size: 20px; line-height: 1; vertical-align: middle; }
+.mat-icon { font-size: 22px; line-height: 1; vertical-align: middle; }
 
 /* Item de navegação: baseline perfeita */
 .app-nav-item,
@@ -82,18 +90,18 @@ html, body {
 .mat-mdc-list-item .menu-item { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 10px 12px; border-radius: 10px; width: 100%; }
 
 .menu-item .mat-icon,
-.menu-item .material-symbols-outlined { color: #7A7174; }
+.menu-item .material-symbols-outlined { color: var(--md-sys-color-outline, #7A7174); }
 
-.menu-item:hover { background: rgba(63,188,165,.12); color: #fff; }
+.menu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%); color: var(--md-sys-color-on-surface, #2B2A28); }
 
 .menu-item.active {
-  background: var(--app-primary, #3FBCA5);
-  color: #fff;
+  background: var(--md-sys-color-primary, #3FBCA5);
+  color: var(--md-sys-color-on-primary, #fff);
 }
 .menu-item.active { font-weight: 600; }
 .menu-item.active .mat-icon, .menu-item.active .material-symbols-outlined { color: #fff; }
 /* Active state when routerLinkActive applies to the anchor */
-.app-nav-item.active .menu-item { background: #3FBCA5; color: #fff; font-weight: 600; }
+.app-nav-item.active .menu-item { background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff); font-weight: 600; }
 .app-nav-item.active .menu-item .material-symbols-outlined,
 .app-nav-item.active .menu-item .mat-icon { color: #fff; }
 
@@ -157,6 +165,36 @@ html, body {
   border-radius: 8px;
 }
 
+/* 7b) Ajuste de alinhamento dos ícones na barra do diálogo (Dynamic Form)
+   Contexto: na UI usamos duas famílias de ícones (Material Icons e Material Symbols).
+   No header do modal do formulário, os botões icônicos devem seguir a métrica do MDC (24px),
+   independentemente de personalizações globais (ex.: 22px em navegação). Este bloco isola
+   o ajuste apenas para o modal (classe .pfx-dialog-pane), evitando efeitos colaterais. */
+.pfx-dialog-pane .dialog-header .mat-mdc-icon-button {
+  height: 40px;
+  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pfx-dialog-pane .dialog-header .mat-mdc-icon-button .mat-icon {
+  font-size: 24px; /* baseline do MDC */
+  line-height: 1;
+  height: 24px;
+  width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right drawer (filter) — position and sizing */
+/* Filter drawer container (dialog-as-drawer) */
+.mat-mdc-dialog-container.filter-right-drawer {
+  border-radius: 0;
+  height: 100vh;
+  padding: 0;
+}
+
 /* 8) Tabelas e listas */
 .mat-mdc-table { border-radius: 12px; overflow: hidden; }
 .mat-mdc-header-row { background: color-mix(in oklab, var(--app-surface-high, #F5F3F1), black 2%); }
@@ -185,8 +223,8 @@ html, body {
   color: color-mix(in oklab, var(--app-text, #F5F3F1), transparent 40%);
   background: color-mix(in oklab, var(--app-surface-high, #332E2D), transparent 20%);
 }
-.theme-dark .menu-item { background: color-mix(in oklab, var(--app-surface, #2B2726), transparent 0%); }
-.theme-dark .menu-item:hover { background: color-mix(in oklab, var(--app-surface, #2B2726), white 2%); }
+.theme-dark .menu-item { background: color-mix(in oklab, var(--md-sys-color-surface, #2B2726), transparent 0%); }
+.theme-dark .menu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #F5F3F1), transparent 92%); }
 
 /* 11b) Modo claro — Sidenav aquecido (NeoSoft) */
 .theme-light {
@@ -197,10 +235,10 @@ html, body {
   .mat-sidenav,
   .app-drawer {
     background:
-      linear-gradient(180deg, #F5F3F1 0%, #EDE6E1 60%, #E9E1DB 100%);
-    border-right: 1px solid #E4DCD6;
+      linear-gradient(180deg, var(--md-sys-color-surface, #F5F3F1) 0%, var(--md-sys-color-surface-container, #EDE6E1) 60%, color-mix(in oklab, var(--md-sys-color-surface-container, #EDE6E1), black 2%) 100%);
+    border-right: 1px solid var(--md-sys-color-outline-variant, #E4DCD6);
     box-shadow: inset -1px 0 0 rgba(0,0,0,0.04);
-    color: #2B2A28;
+    color: var(--md-sys-color-on-surface, #2B2A28);
   }
 
   /* Menu principal (cartões arredondados quentes) */
@@ -241,23 +279,23 @@ html, body {
   .menu-item .mat-icon {
     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
     font-size: 20px; line-height: 1; vertical-align: middle;
-    color: #7A7174;
+    color: var(--md-sys-color-outline, #7A7174);
   }
 
   /* Hover: bege levemente mais escuro (sem branco) */
-  .menu-item:hover,
+  .menu-item:hover:not(.active),
   .menu-group:hover,
-  .mat-mdc-list-item:hover {
-    background: rgba(63,188,165,.08);
-    color: #2B2A28;
+  .mat-mdc-list-item:hover:not(.active) {
+    background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%);
+    color: var(--md-sys-color-on-surface, #2B2A28);
   }
 
   /* Ativo: pílula teal com texto branco */
   .menu-item.active,
   .mat-mdc-list-item.active,
   .mdc-list .mdc-list-item--activated {
-    background: #3FBCA5;
-    color: #fff;
+    background: var(--md-sys-color-primary, #3FBCA5);
+    color: var(--md-sys-color-on-primary, #fff);
     border-radius: 999px;
     padding: 8px 16px;
     box-shadow: 0 1px 2px rgba(0,0,0,.08);
@@ -265,15 +303,26 @@ html, body {
     transition: all .2s ease;
   }
   .menu-item.active .material-symbols-outlined,
-  .menu-item.active .mat-icon { color: #fff; }
+  .menu-item.active .mat-icon { color: var(--md-sys-color-on-primary, #fff); }
   .app-nav-item.active .menu-item {
-    background: #3FBCA5; color: #fff;
+    background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff);
     border-radius: 999px; padding: 8px 16px;
     box-shadow: 0 1px 2px rgba(0,0,0,.08);
     font-weight: 600; transition: all .2s ease;
   }
   .app-nav-item.active .menu-item .material-symbols-outlined,
-  .app-nav-item.active .menu-item .mat-icon { color: #fff; }
+  .app-nav-item.active .menu-item .mat-icon { color: var(--md-sys-color-on-primary, #fff); }
+
+  /* Collapsed sidebar: neutralize pill style for active items */
+  .app-sidenav.collapsed .menu .menu-item.active {
+    background: transparent;
+    color: var(--md-sys-color-on-surface, #3B3735);
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: none;
+  }
+  .app-sidenav.collapsed .menu .menu-item.active .material-symbols-outlined,
+  .app-sidenav.collapsed .menu .menu-item.active .mat-icon { color: var(--md-sys-color-on-surface, #3B3735); }
 
   /* Submenus: container com animação e recuo */
   .submenu {
@@ -283,7 +332,7 @@ html, body {
     max-height: 0;
     opacity: 0;
     transition: max-height .25s ease, opacity .25s ease;
-    padding-left: 32px;
+    padding-left: 24px;
   }
   .submenu.open { max-height: 500px; opacity: 1; }
 
@@ -293,13 +342,14 @@ html, body {
     padding: 8px 12px;
     margin-top: 4px;
     border-radius: 10px;
-    color: #3B3735;
-    background: #EDE6E1;
-    border: 1px solid #E4DCD6;
+    color: var(--md-sys-color-on-surface, #3B3735);
+    background: var(--md-sys-color-surface-container, #EDE6E1);
+    border: 1px solid var(--md-sys-color-outline-variant, #E4DCD6);
     transition: background .15s ease, color .15s ease;
+    font-size: 13px;
   }
-  .submenu-item:hover { background: rgba(63,188,165,.08); }
-  .submenu-item.active { background: #3FBCA5; color: #fff; font-weight: 600; }
+  .submenu-item:hover { background: color-mix(in oklab, var(--md-sys-color-on-surface, #2B2A28), transparent 92%); }
+  .submenu-item.active { background: var(--md-sys-color-primary, #3FBCA5); color: var(--md-sys-color-on-primary, #fff); font-weight: 600; }
 
   /* Toolbar combina com os cartões (sem branco chapado) */
   .app-toolbar {
@@ -347,3 +397,24 @@ html, body {
 /* 12) Links coerentes com a paleta */
 a { color: var(--app-primary, #3FBCA5); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* 13) Escala tipográfica M3 (utilitários) */
+.typ-display-large  { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 57px; line-height: 64px; letter-spacing: 0; }
+.typ-display-medium { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 45px; line-height: 52px; letter-spacing: 0; }
+.typ-display-small  { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 36px; line-height: 44px; letter-spacing: 0; }
+
+.typ-headline-large { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 32px; line-height: 40px; letter-spacing: 0; }
+.typ-headline-medium{ font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 28px; line-height: 36px; letter-spacing: 0; }
+.typ-headline-small { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 24px; line-height: 32px; letter-spacing: 0; }
+
+.typ-title-large    { font-family: 'Poppins','Inter',sans-serif; font-weight: 500; font-size: 22px; line-height: 28px; letter-spacing: 0; }
+.typ-title-medium   { font-family: 'Inter','Poppins',sans-serif; font-weight: 500; font-size: 16px; line-height: 24px; letter-spacing: 0.15px; }
+.typ-title-small    { font-family: 'Inter','Poppins',sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; letter-spacing: 0.1px; }
+
+.typ-label-large    { font-family: 'Inter','Poppins',sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; letter-spacing: 0.1px; }
+.typ-label-medium   { font-family: 'Inter','Poppins',sans-serif; font-weight: 500; font-size: 12px; line-height: 16px; letter-spacing: 0.5px; text-transform: none; }
+.typ-label-small    { font-family: 'Inter','Poppins',sans-serif; font-weight: 500; font-size: 11px; line-height: 16px; letter-spacing: 0.5px; text-transform: none; }
+
+.typ-body-large     { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 16px; line-height: 24px; letter-spacing: 0.5px; }
+.typ-body-medium    { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 14px; line-height: 20px; letter-spacing: 0.25px; }
+.typ-body-small     { font-family: 'Inter','Poppins',sans-serif; font-weight: 400; font-size: 12px; line-height: 16px; letter-spacing: 0.4px; }

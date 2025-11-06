@@ -1,0 +1,3 @@
+/* Esticar o CRUD para ocupar a altura disponível dentro de .app-content */
+:host { display: block; min-height: 0; }
+praxis-crud { display: block; height: 100%; }

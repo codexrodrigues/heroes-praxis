@@ -147,12 +147,35 @@ $praxis-dark-theme: mat.define-theme((
 }
 
 /* ------------------------------------------
-   5) Tokens utilitários (fundos/menus/itens)
-   - Mapeiam a estética do layout de referência
+   5) Tokens utilitários (fundos/menus/itens) e M3 CSS vars
+   - Exponha papéis M3 como CSS custom properties (--md-sys-color-*)
+   - Mantém compatibilidade com tokens legados (--app-*) enquanto migra
    ------------------------------------------ */
 
 /* Fundo base do app (quente / acinzentado) */
 :root {
+  /* M3 color roles (light defaults) */
+  --md-sys-color-primary: #3FBCA5;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-secondary: #7A7174;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-tertiary: #AB82D9;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-surface: #F5F3F1;
+  --md-sys-color-on-surface: #2B2A28;
+  --md-sys-color-surface-container: #EDE6E1;
+  --md-sys-color-surface-container-low: #F4EEE8;
+  --md-sys-color-surface-container-high: #E0F5EE; /* usado p/ submenus */
+  --md-sys-color-outline: #D8D3CF;
+  --md-sys-color-outline-variant: #E4DCD6;
+  --md-sys-color-inverse-surface: #2F2B2A;
+  --md-sys-color-inverse-on-surface: #F5F3F1;
+
+  /* M3 state layers */
+  --md-sys-state-hover-opacity: 8%;
+  --md-sys-state-focus-opacity: 12%;
+  --md-sys-state-pressed-opacity: 12%;
+
   --app-bg: #EDE6E1; /* bege quente (fundo padrão do app) */
   --app-surface: #EDE6E1;
   --app-surface-high: #F5F3F1;
@@ -174,6 +197,22 @@ $praxis-dark-theme: mat.define-theme((
 
 @media (prefers-color-scheme: dark) {
   :root:not(.theme-light):not(.theme-dark) {
+    --md-sys-color-primary: #3FBCA5;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-secondary: #AEA5A8;
+    --md-sys-color-on-secondary: #2B2A28;
+    --md-sys-color-tertiary: #C4A1EC;
+    --md-sys-color-on-tertiary: #2B2A28;
+    --md-sys-color-surface: #2B2726;
+    --md-sys-color-on-surface: #F5F3F1;
+    --md-sys-color-surface-container: #332E2D;
+    --md-sys-color-surface-container-low: #1F1C1B;
+    --md-sys-color-surface-container-high: #2F2B2A;
+    --md-sys-color-outline: #3f3a38;
+    --md-sys-color-outline-variant: #504B49;
+    --md-sys-color-inverse-surface: #F5F3F1;
+    --md-sys-color-inverse-on-surface: #2B2A28;
+
     --app-bg: #1F1C1B;
     --app-surface: #2B2726;
     --app-surface-high: #332E2D;
@@ -184,6 +223,22 @@ $praxis-dark-theme: mat.define-theme((
 }
 
 .theme-dark {
+  --md-sys-color-primary: #64D0B8;
+  --md-sys-color-on-primary: #1b2b27;
+  --md-sys-color-secondary: #B6B1AC;
+  --md-sys-color-on-secondary: #2B2A28;
+  --md-sys-color-tertiary: #C4A1EC;
+  --md-sys-color-on-tertiary: #2B2A28;
+  --md-sys-color-surface: #2B2726;
+  --md-sys-color-on-surface: #F5F3F1;
+  --md-sys-color-surface-container: #332E2D;
+  --md-sys-color-surface-container-low: #1F1C1B;
+  --md-sys-color-surface-container-high: #2F2B2A;
+  --md-sys-color-outline: #3f3a38;
+  --md-sys-color-outline-variant: #504B49;
+  --md-sys-color-inverse-surface: #F5F3F1;
+  --md-sys-color-inverse-on-surface: #2B2A28;
+
   --app-bg: #1F1C1B;
   --app-surface: #2B2726;
   --app-surface-high: #332E2D;
@@ -193,6 +248,22 @@ $praxis-dark-theme: mat.define-theme((
 }
 
 .theme-light {
+  --md-sys-color-primary: #3FBCA5;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-secondary: #7A7174;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-tertiary: #AB82D9;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-surface: #F5F3F1;
+  --md-sys-color-on-surface: #2B2A28;
+  --md-sys-color-surface-container: #EDE6E1;
+  --md-sys-color-surface-container-low: #F4EEE8;
+  --md-sys-color-surface-container-high: #E0F5EE;
+  --md-sys-color-outline: #D8D3CF;
+  --md-sys-color-outline-variant: #E4DCD6;
+  --md-sys-color-inverse-surface: #2F2B2A;
+  --md-sys-color-inverse-on-surface: #F5F3F1;
+
   --app-bg: #F4EEE8; /* fundo da área de conteúdo clara */
   --app-surface: #EDE6E1;
   --app-surface-high: #F5F3F1;

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewChild, HostListener, computed, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
@@ -22,12 +22,12 @@ type MenuItem = {
     selector: 'app-root',
     standalone: true,
     imports: [
-        RouterOutlet, RouterLink, RouterLinkActive,
+        RouterOutlet, RouterLink,
         MatSidenavModule, MatToolbarModule, MatListModule, MatIconModule, MatButtonModule, MatExpansionModule, SidebarComponent,
     ],
     template: `
-  <mat-sidenav-container class="app-shell app-bg">
-    <mat-sidenav [mode]="isDesktop() ? 'side' : 'over'" [opened]="isDesktop()" class="app-drawer collapsible" [style.width.px]="collapsed() ? 64 : 240">
+  <mat-sidenav-container class="app-shell app-bg" autosize>
+    <mat-sidenav [mode]="isDesktop() ? 'side' : 'over'" [opened]="isDesktop()" class="app-drawer collapsible" [style.width.px]="collapsed() ? 80 : 240">
       <app-sidebar [menu]="menu()" [collapsed]="collapsed()" (toggleCollapse)="toggleCollapsed()"></app-sidebar>
     </mat-sidenav>
 
@@ -38,7 +38,12 @@ type MenuItem = {
             <span class="material-symbols-outlined">menu</span>
           </button>
         }
-        <h1 class="app-title">Praxis HR</h1>
+        <a class="brand-link" routerLink="/" aria-label="Ir para o Dashboard">
+          <h1 class="app-title typ-title-large"><span class="brand-gradient">Praxis HR</span></h1>
+        </a>
+        @if (tenantLabel()) {
+          <span class="env-pill" title="Ambiente/Tenant">{{ tenantLabel() }}</span>
+        }
         <span class="spacer"></span>
         <button mat-icon-button (click)="toggleTheme()" aria-label="Alternar tema claro/escuro">
           <span class="material-symbols-outlined">{{ themeIcon() }}</span>
@@ -62,11 +67,27 @@ type MenuItem = {
     .app-shell { height: 100vh; }
     .app-drawer { box-shadow: none; }
     .app-nav-item { color: inherit; }
+    .brand-link { display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+    .app-title { margin: 0; line-height: 1.1; }
+    .brand-gradient {
+      background: linear-gradient(90deg, var(--md-sys-color-primary, #3FBCA5) 0%, color-mix(in oklab, var(--md-sys-color-primary, #3FBCA5), white 36%) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+      text-shadow: 0 1px 0 rgba(0,0,0,.04);
+    }
+    :host-context(.theme-dark) .brand-gradient {
+      background: linear-gradient(90deg, var(--md-sys-color-primary, #64D0B8) 0%, color-mix(in oklab, var(--md-sys-color-primary, #64D0B8), white 48%) 100%);
+    }
+    .env-pill { margin-left: 10px; padding: 2px 8px; border-radius: 999px; font: 600 11px/1 'Inter', sans-serif; letter-spacing: .04em;
+      color: var(--md-sys-color-on-secondary, #1B1B1B); background: color-mix(in oklab, var(--md-sys-color-secondary, #9ADCCB), white 30%);
+      border: 1px solid color-mix(in oklab, var(--md-sys-color-outline-variant, #D8D3CF), transparent 35%);
+    }
+    .brand-link:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklab, var(--md-sys-color-primary, #3FBCA5), white 30%); border-radius: 8px; }
   `],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
     protected theme = signal<'light' | 'dark'>('light');
+    protected tenantLabel = signal<string | null>(null);
     protected themeIcon = computed(() => this.theme() === 'dark' ? 'light_mode' : 'dark_mode');
     protected readonly menu = signal<SidebarGroup[]>([
         {
@@ -110,6 +131,12 @@ export class AppComponent {
         this.theme.set(this.getInitialTheme());
         // inicializa estado colapsado
         this.collapsed.set(this.getInitialCollapsed());
+        // ambiente/tenant (opcional)
+        try {
+            const t = localStorage.getItem('pax.api.tenant') || 'demo';
+            const env = (localStorage.getItem('pax.api.env') || '').trim();
+            this.tenantLabel.set(env ? `${env}:${t}` : t);
+        } catch {}
     }
 
     toggleSidenav() { this.sidenav?.toggle(); }
